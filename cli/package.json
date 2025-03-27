@@ -1,0 +1,17 @@
+{
+  "name": "@esm_learning/cli",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "mycli": "./dist/index.cjs"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts"
+  },
+  "dependencies": {
+    "@esm_learning/shared": "file:../shared"
+  },
+  "devDependencies": {
+    "tsup": "8.3.5"
+  }
+}

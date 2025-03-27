@@ -1,0 +1,26 @@
+{
+  "name": "esm_learning",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "npm run build -w @esm_learning/shared && npm run build -w @esm_learning/cli",
+    "test": "vitest --run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.13.14",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.9"
+  },
+  "files": [
+    "dist/"
+  ],
+  "workspaces": [
+    "shared",
+    "cli"
+  ]
+}

@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+__cli-test/
+*.tgz
+
+# builds
+dist/
+
+# IDE
+.idea/
+.vscode/
+
+# logs
+*.log
+
+# test cache
+coverage/
+
+**/.DS_Store
