@@ -67,27 +67,51 @@ describe('Integration: shared as local tgz + CLI as tgz', () => {
         console.log('CLI STDERR:', result.stderr);
 
         expect(result.status).toBe(0);
-        expect(result.stdout.trim()).toBe('Hello, World!');
+        expect(result.stdout.trim()).toContain('Hello, World!');
+        expect(result.stdout).toContain('Hello from the default plugin!');
     });
 
-    it('imports and runs shared library from .tgz', () => {
+    it('imports PluginLoader from shared and runs a custom plugin', () => {
+        const pluginPath = join(LIB_USER_DIR, 'my-plugin.mjs');
         const consumerFile = join(LIB_USER_DIR, 'consumer.mjs');
 
+        // Write a custom plugin
         writeFileSync(
-            consumerFile,
+            pluginPath,
             `
-        import { greet } from '@esm_learning/shared';
-        console.log(greet("Library User"));
-      `,
+            export default class {
+                action() {
+                    console.log("👋 Hello from custom plugin!");
+                }
+            }
+        `,
             'utf-8'
         );
 
+        // Write a script to load + run the plugin
+        writeFileSync(
+            consumerFile,
+            `
+            import { PluginLoader } from '@esm_learning/shared';
+            import path from 'path';
+            import { fileURLToPath } from 'url';
+
+            const __dirname = path.dirname(fileURLToPath(import.meta.url));
+            const pluginPath = path.join(__dirname, './my-plugin.mjs');
+
+            await PluginLoader.loadAndRun(pluginPath);
+        `,
+            'utf-8'
+        );
+
+        // Run the script
         const result = spawnSync('node', [consumerFile], { encoding: 'utf-8' });
 
-        console.log('LIB STDOUT:', result.stdout);
-        console.log('LIB STDERR:', result.stderr);
+        console.log('PLUGIN STDOUT:', result.stdout);
+        console.log('PLUGIN STDERR:', result.stderr);
 
         expect(result.status).toBe(0);
-        expect(result.stdout.trim()).toBe('Hello, Library User!');
+        expect(result.stdout.trim()).toBe('👋 Hello from custom plugin!');
     });
+
 });

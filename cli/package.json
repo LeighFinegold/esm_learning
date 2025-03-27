@@ -5,6 +5,9 @@
   "bin": {
     "mycli": "./dist/index.cjs"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup src/index.ts",
     "prepare-publish": "node scripts/fix-deps.mjs",

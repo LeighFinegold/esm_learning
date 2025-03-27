@@ -1,3 +1,8 @@
-import { greet } from '@esm_learning/shared';
+import { greet, runDefaultPlugin } from '@esm_learning/shared';
 
-console.log(greet("World"));
+async function main() {
+    console.log(greet("World"));
+    await runDefaultPlugin();
+}
+
+main();

@@ -34,6 +34,18 @@ This repo demonstrates how to structure and evolve a modern TypeScript CLI and s
 > ✅ This makes both packages portable, reusable, and testable without publishing to npm
 
 ---
+## ✅ Commit 3: Dynamic Plugin System in Shared + Custom Consumer Plugin
+
+- Introduced a `Plugin` interface and `PluginLoader` class in `shared`
+- Added `runDefaultPlugin()` which loads a built-in plugin via `ts-node` or dynamic import
+- CLI updated to call `runDefaultPlugin()` after greeting the user
+- End-to-end test updated to:
+    - Create a library consumer that writes its own plugin class
+    - Dynamically loads and runs that plugin using `PluginLoader` from `@esm_learning/shared`
+    - Handles ESM/CJS compatibility and dynamic runtime paths
+
+> ✅ Demonstrates extensibility: CLI + shared plugin system + consumer plugins — all tested locally
+
 
 ## 🧪 Testing Strategy
 
