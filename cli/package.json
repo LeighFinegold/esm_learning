@@ -6,10 +6,12 @@
     "mycli": "./dist/index.cjs"
   },
   "scripts": {
-    "build": "tsup src/index.ts"
+    "build": "tsup src/index.ts",
+    "prepare-publish": "node scripts/fix-deps.mjs",
+    "prepublishOnly": "npm run prepare-publish"
   },
   "dependencies": {
-    "@esm_learning/shared": "file:../shared"
+    "@esm_learning/shared": "^1.0.0"
   },
   "devDependencies": {
     "tsup": "8.3.5"

@@ -1,52 +1,59 @@
 # esm-learning
 
-This is a public reference project that demonstrates how to build an ESM-based TypeScript CLI with shared modules with packaging.
+This repo demonstrates how to structure and evolve a modern TypeScript CLI and shared module architecture using npm workspaces, `tsup`, and `npm pack` — **without needing to publish to a registry**.
 
-## 🧱 Project Structure
+---
 
-```
-esm-learning/
-├── shared/         # ESM-only shared module
-├── cli/            # CLI entry point, bundled to CJS with shebang
-├── cli.e2e.spec.ts # Integration test that builds, packs, installs, and runs the CLI
-├── tsconfig.base.json
-└── package.json    # Uses npm workspaces
-```
+## 📜 Evolution of the Project (Commit History)
 
-## 🛠️ Tech Stack
+### ✅ Commit 1: CLI with Shared Module Bundled
 
-- [TypeScript](https://www.typescriptlang.org/)
-- [Tsup](https://tsup.egoist.dev/) for fast, opinionated builds
-- [Vitest](https://vitest.dev/) for integration/E2E testing
-- npm workspaces for clean module boundaries
+- Created two packages:
+    - `cli`: a simple CLI that prints a greeting
+    - `shared`: a module exporting `greet(name)`
+- `cli` imported `greet` from `@esm_learning/shared`
+- Used `tsup` to bundle `shared` into the CLI binary (`noExternal`)
+- Packed CLI with `npm pack`
+- Integration test installed the `.tgz` and ran the CLI via the `bin` script
 
-## 🚀 Usage
+> ✅ Good for simple tools, but tightly couples CLI and shared
 
-### Build
+---
 
-```bash
-npm run build
-```
+### ✅ Commit 2: CLI and Shared as Separately Publishable Modules
 
-Builds both `shared` and `cli` modules using workspace script.
+- Promoted `shared` to a standalone, versioned module
+- Updated `cli` to treat `@esm_learning/shared` as an external dependency
+- Introduced `prepare-publish` script to convert local `"file:../shared"` reference to real semver (`^1.0.0`) before packing
+- Created end-to-end integration test that:
+    - Packs both `shared` and `cli` into `.tgz` files
+    - Simulates two consumers:
+        - One imports and uses `@esm_learning/shared`
+        - One installs and runs the CLI via `bin`
 
-### Test
+> ✅ This makes both packages portable, reusable, and testable without publishing to npm
 
-```bash
-npm run test
-```
+---
 
-Runs an integration test that:
-- Builds the shared and CLI modules
-- Packs the CLI into a `.tgz`
-- Installs that `.tgz` into a fresh temp folder
-- Executes the CLI via its declared `bin` script
+## 🧪 Testing Strategy
 
-### CLI Output
+- Uses `vitest` to simulate real consumers
+- Runs `npm install` on the `.tgz` files in fresh temp folders
+- Verifies both library and CLI behavior
+- Proves that local packaging workflows can fully replace registry publishing for testing and distribution
 
-```bash
-Hello, World!
-```
+---
+
+## 🛠️ Stack
+
+- TypeScript + `tsup`
+- npm workspaces
+- `npm pack`
+- `vitest`
+- CJS CLI with shebang
+- ESM/CJS dual export for shared
+
+---
 
 ## 📝 License
 

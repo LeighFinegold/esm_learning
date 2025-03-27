@@ -11,7 +11,6 @@ export default defineConfig({
     bundle:true,
     target: 'node18',
     shims: true,
-    noExternal: ['@esm_learning/shared'],
     banner: ({ format }) => {
         if (format === 'cjs') {
             return {
